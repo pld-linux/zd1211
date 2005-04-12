@@ -7,7 +7,7 @@
 #
 %define		_zd1211_ver	0.0.1
 %define		_zd1211_name	zd1211
-%define		_rel		0.1
+%define		_rel		1
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211
 Name:		kernel-net-zd1211
@@ -82,26 +82,23 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		M=$PWD O=$PWD \
 		CC="%{__cc}" CPP="%{__cpp}" \
 		%{?with_verbose:V=1}
-	for i in *.ko; do
-		m=$(echo "$i" | sed -e 's#\.ko##g')
-		mv $m{,-$cfg}.ko
+	for i in zd1211; do
+		mv $i{,-$cfg}.ko
 	done
 done
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
-for i in *-up.ko; do
-	m=$(echo "$i" | sed -e 's#-up\.ko##g')
-	install $m-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/usb/net/$m.ko
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/usb/net
+for i in zd1211; do
+	install $i-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
+		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/usb/net/$i.ko
 done
 %if %{with smp} && %{with dist_kernel}
-for i in zd*-smp.ko; do
-m=$(echo "$i" | sed -e 's#-smp\.ko##g')
-install $m-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/usb/net/$m.ko
+for i in zd1211; do
+	install $i-smp.ko \
+		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/usb/net/$i.ko
 done
 %endif
 

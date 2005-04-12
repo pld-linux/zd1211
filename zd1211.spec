@@ -16,7 +16,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 License:	GPL v2
 Source0:	%{_zd1211_name}.tar.gz
-# Source0-md5:	2246f0879439d74f7aabc7935cec90c0
+# Source0-md5:	fce2ea3dc50cdf2efc906673acf515f4
 URL:		http://zd1211.sourceforge.net/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}

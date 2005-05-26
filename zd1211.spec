@@ -7,7 +7,7 @@
 #
 %define		_zd1211_ver	0.0.1
 %define		_zd1211_name	zd1211
-%define		_rel		1
+%define		_rel		2
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211
 Name:		kernel-net-zd1211
@@ -16,7 +16,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 License:	GPL v2
 Source0:	%{_zd1211_name}.tar.gz
-# Source0-md5:	fce2ea3dc50cdf2efc906673acf515f4
+# Source0-md5:	23f9e42f7930ae1189016f5081e7c76b
 URL:		http://zd1211.sourceforge.net/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}

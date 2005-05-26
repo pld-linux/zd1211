@@ -82,7 +82,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		M=$PWD O=$PWD \
 		CC="%{__cc}" CPP="%{__cpp}" \
 		%{?with_verbose:V=1}
-	for i in zd1211; do
+	for i in zd1211_mod; do
 		mv $i{,-$cfg}.ko
 	done
 done
@@ -91,12 +91,12 @@ done
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/usb/net
-for i in zd1211; do
+for i in zd1211_mod; do
 	install $i-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
 		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/usb/net/$i.ko
 done
 %if %{with smp} && %{with dist_kernel}
-for i in zd1211; do
+for i in zd1211_mod; do
 	install $i-smp.ko \
 		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/usb/net/$i.ko
 done

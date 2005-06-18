@@ -63,6 +63,8 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %build
 # kernel module(s)
+cat src/zddevlist | awk -f src/zddevlist.awk > src/zddevlist.h
+cd src
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
@@ -89,6 +91,8 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+cd src
 
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/usb/net
 for i in zd1211_mod; do

@@ -19,6 +19,7 @@ Source0:	%{_zd1211_name}.tar.gz
 # Source0-md5:	23f9e42f7930ae1189016f5081e7c76b
 URL:		http://zd1211.sourceforge.net/
 %if %{with kernel}
+BuildRequires:	gawk
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
@@ -63,7 +64,7 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %build
 # kernel module(s)
-cat src/zddevlist | awk -f src/zddevlist.awk > src/zddevlist.h
+cat src/zddevlist | gawk -f src/zddevlist.awk > src/zddevlist.h
 cd src
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then

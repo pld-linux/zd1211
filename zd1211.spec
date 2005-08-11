@@ -95,15 +95,15 @@ rm -rf $RPM_BUILD_ROOT
 
 cd src
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/usb/net
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/net
 for i in zd1211_mod; do
 	install $i-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/usb/net/$i.ko
+		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/$i.ko
 done
 %if %{with smp} && %{with dist_kernel}
 for i in zd1211_mod; do
 	install $i-smp.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/usb/net/$i.ko
+		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/net/$i.ko
 done
 %endif
 
@@ -124,10 +124,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/drivers/usb/net/*.ko*
+/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/*.ko*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-net-zd1211
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/drivers/usb/net/*.ko*
+/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/net/*.ko*
 %endif

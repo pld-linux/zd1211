@@ -5,9 +5,9 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define		_zd1211_ver	0.0.1
+%define		_zd1211_ver	0.0.2
 %define		_zd1211_name	zd1211
-%define		_rel		2
+%define		_rel		1
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211
 Name:		kernel-net-zd1211
@@ -16,10 +16,9 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 License:	GPL v2
 Source0:	%{_zd1211_name}.tar.gz
-# Source0-md5:	23f9e42f7930ae1189016f5081e7c76b
-URL:		http://zd1211.sourceforge.net/
+# Source0-md5:	7f5ae904b60df48cd2a15777d3c94049
+URL:		http://zd1211.ath.cx/
 %if %{with kernel}
-BuildRequires:	gawk
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
@@ -64,8 +63,6 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %build
 # kernel module(s)
-cat src/zddevlist | gawk -f src/zddevlist.awk > src/zddevlist.h
-cd src
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
@@ -93,8 +90,6 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-cd src
 
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/net
 for i in zd1211_mod; do

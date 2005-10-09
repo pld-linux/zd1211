@@ -1,0 +1,39 @@
+diff -urbB zd1211.org/Makefile zd1211/Makefile
+--- zd1211.org/Makefile	2005-10-02 16:29:04.000000000 +0200
++++ zd1211/Makefile	2005-10-09 11:08:39.000000000 +0200
+@@ -38,14 +38,6 @@
+ 
+ EXTRA_CFLAGS += -I$(PWD)/src/include
+ 
+-ifndef CONFIG_FRAME_POINTER
+-EXTRA_CFLAGS += -fomit-frame-pointer
+-endif
+-         
+-ifdef CONFIG_SMP
+-EXTRA_CFLAGS += -D__SMP__ -DSMP
+-endif
+-
+ KDIR := $(MODPATH)/build
+ PWD := $(shell pwd)
+ 
+@@ -155,20 +147,6 @@
+     $(SRC_DIR)/zdusb.o 
+     OBJECTS += $(SRC_DIR)/zd1211.o
+ 
+-CFLAGS=-O -Wall -Wstrict-prototypes -pipe # -Wa,-a,-ad -g
+-
+-ifdef CONFIG_MODVERSIONS
+-CFLAGS += -DMODVERSIONS -include $(KERNEL_SOURCE)/include/linux/modversions.h   #kernel 2.4
+-endif
+-
+-ifndef CONFIG_FRAME_POINTER
+-CFLAGS += -fomit-frame-pointer
+-endif
+-
+-ifdef CONFIG_SMP
+-CFLAGS += -D__SMP__ -DSMP
+-endif
+-
+ CFLAGS += -DHOST_IF_USB
+ CFLAGS += -DAMAC
+ CFLAGS += -DGCCK

@@ -1,7 +1,22 @@
 diff -urbB zd1211.org/Makefile zd1211/Makefile
 --- zd1211.org/Makefile	2005-10-02 16:29:04.000000000 +0200
-+++ zd1211/Makefile	2005-10-09 11:08:39.000000000 +0200
-@@ -38,14 +38,6 @@
++++ zd1211/Makefile	2005-10-09 11:26:06.551540500 +0200
+@@ -21,9 +21,6 @@
+ ZD1211REV_B=0
+ 
+ SRC_DIR=src
+-DEFINES=-D__KERNEL__ -DMODULE=1
+-
+-
+ 
+ ifeq ($(KERN_26), y)
+ 
+@@ -34,18 +31,10 @@
+ MODULE = zd1211.ko
+ endif
+ 
+-INCLUDES=-I$(KERNEL_SOURCE)/include -I$(SRC_DIR)/include/ -I$(SRC_DIR)
++INCLUDES=-I$(SRC_DIR)
  
  EXTRA_CFLAGS += -I$(PWD)/src/include
  
@@ -16,7 +31,7 @@ diff -urbB zd1211.org/Makefile zd1211/Makefile
  KDIR := $(MODPATH)/build
  PWD := $(shell pwd)
  
-@@ -155,20 +147,6 @@
+@@ -155,20 +144,6 @@
      $(SRC_DIR)/zdusb.o 
      OBJECTS += $(SRC_DIR)/zd1211.o
  
@@ -37,3 +52,19 @@ diff -urbB zd1211.org/Makefile zd1211/Makefile
  CFLAGS += -DHOST_IF_USB
  CFLAGS += -DAMAC
  CFLAGS += -DGCCK
+diff -urbB zd1211.org/src/zd1205.c zd1211/src/zd1205.c
+--- zd1211.org/src/zd1205.c	2005-10-02 16:29:03.000000000 +0200
++++ zd1211/src/zd1205.c	2005-10-09 11:36:53.755988250 +0200
+@@ -441,12 +441,6 @@
+         } else
+                 mdelay(ms);
+ }
+-
+-asmlinkage _syscall3(int,write,int,fd,const char *,buf,off_t,count)
+-asmlinkage _syscall3(int,read,int,fd,char *,buf,off_t,count)
+-asmlinkage _syscall3(int,open,const char *,file,int,flag,int,mode)
+-asmlinkage _syscall1(int,close,int,fd)
+-
+ #endif
+ 
+ 

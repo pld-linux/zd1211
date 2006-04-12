@@ -13,18 +13,18 @@ Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie 
 Name:		kernel-net-zd1211
 Version:	%{_zd1211_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
 License:	GPL v2
+Group:		Base/Kernel
 Source0:	%{_zd1211_name}.tar.gz
 # Source0-md5:	7f5ae904b60df48cd2a15777d3c94049
 Patch0:		%{name}-build.patch
 URL:		http://zd1211.ath.cx/
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 %{?with_dist_kernel:%requires_releq_kernel_up}
+BuildRequires:	rpmbuild(macros) >= 1.153
 Requires(post,postun):	/sbin/depmod
 %{?with_dist_kernel:Requires(postun):	kernel}
-BuildRequires:	rpmbuild(macros) >= 1.153
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 

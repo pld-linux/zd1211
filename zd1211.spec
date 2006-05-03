@@ -6,8 +6,8 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211
-%define		_rel		1
+%define		_zd1211_name	zd1211-driver-r74
+%define		_rel		2
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211
 Name:		kernel-net-zd1211
@@ -15,8 +15,8 @@ Version:	%{_zd1211_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL v2
 Group:		Base/Kernel
-Source0:	%{_zd1211_name}.tar.gz
-# Source0-md5:	7f5ae904b60df48cd2a15777d3c94049
+Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
+# Source0-md5:	17d940519358cca223795daf0be4394e
 Patch0:		%{name}-build.patch
 URL:		http://zd1211.ath.cx/
 %if %{with kernel}
@@ -61,36 +61,35 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
 %setup -q -n %{_zd1211_name}
-%patch0 -p1
+#%patch0 -p1
 
 %build
 # kernel module(s)
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
+    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
-	fi
-	for t in zd1211 zd1211b; do
-		rm -rf include
-		install -d include/{linux,config}
-		ln -sf %{_kernelsrcdir}/config-$cfg .config
-		ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-		ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-		ln -sf %{_kernelsrcdir}/include/linux/version.h include/linux/version.h
-		ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
-		touch include/config/MARKER
-		%{__make} -C %{_kernelsrcdir} clean \
-			RCS_FIND_IGNORE="-name '*.ko' -o" \
-			M=$PWD O=$PWD \
-			%{?with_verbose:V=1}
-		%{__make} -C %{_kernelsrcdir} modules \
-			`[ "$t" = "zd1211" ] && echo ZD1211REV_B=0 || echo ZD1211REV_B=1` \
-			M=$PWD O=$PWD \
-			CC="%{__cc}" CPP="%{__cpp}" \
-			%{?with_verbose:V=1}
+    fi
+    for t in zd1211 zd1211b; do
+	install -d o/include/linux
+	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
+	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
+	%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+
+	%{__make} -C %{_kernelsrcdir} clean \
+		RCS_FIND_IGNORE="-name '*.ko' -o" \
+		M=$PWD O=$PWD/o \
+		%{?with_verbose:V=1}
+	%{__make} -C %{_kernelsrcdir} modules \
+		`[ "$t" = "zd1211" ] && echo ZD1211REV_B=0 || echo ZD1211REV_B=1` \
+		CC="%{__cc}" CPP="%{__cpp}" \
+		M=$PWD O=$PWD/o \
+		%{?with_verbose:V=1}
+
 		for i in $t; do
 			mv $i{,-$cfg}.ko
 		done
-	done
+    done
 done
 
 %install

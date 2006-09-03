@@ -6,7 +6,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211-driver-r74
+%define		_zd1211_name	zd1211-driver-r83
 %define		_rel		2
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211
@@ -16,7 +16,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
-# Source0-md5:	17d940519358cca223795daf0be4394e
+# Source0-md5:	a5751f0e6f1f368689077fa7758a4932
 Patch0:		%{name}-build.patch
 URL:		http://zd1211.ath.cx/
 %if %{with kernel}

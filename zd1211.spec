@@ -1,4 +1,7 @@
 #
+#TODO
+#- udev rules
+
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
@@ -6,7 +9,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211-driver-r83
+%define		_zd1211_name	zd1211-driver-r84
 %define		_rel		2
 Summary:	Linux driver for WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie zd1211

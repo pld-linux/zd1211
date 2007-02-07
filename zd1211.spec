@@ -6,6 +6,7 @@
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
 %bcond_without	smp		# don't build SMP module
+%bcond_without	up		#
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2

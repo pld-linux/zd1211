@@ -12,7 +12,7 @@
 %define		_zd1211_name	zd1211-driver-r83
 %define		_rel		2
 Summary:	Linux driver for WLAN cards based on zd1211
-Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≥adzie zd1211
+Summary(pl.UTF-8):   Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≈Çadzie zd1211
 Name:		kernel-net-zd1211
 Version:	%{_zd1211_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -36,15 +36,15 @@ This is a Linux driver for WLAN cards based on zd1211.
 
 This package contains Linux UP module.
 
-%description -l pl
-Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≥adzie
+%description -l pl.UTF-8
+Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≈Çadzie
 zd1211.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa UP.
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa UP.
 
 %package -n kernel-smp-net-zd1211
 Summary:	Linux SMP driver for WLAN cards based on zd1211
-Summary(pl):	Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na uk≥adzie zd1211
+Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na uk≈Çadzie zd1211
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
@@ -56,11 +56,11 @@ This is a Linux driver for WLAN cards based on zd1211.
 
 This package contains Linux SMP module.
 
-%description -n kernel-smp-net-zd1211 -l pl
-Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≥adzie
+%description -n kernel-smp-net-zd1211 -l pl.UTF-8
+Sterownik dla Linuksa do kart bezprzewodowych opartych na uk≈Çadzie
 zd1211.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa SMP.
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa SMP.
 
 %prep
 %setup -q -n %{_zd1211_name}

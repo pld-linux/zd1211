@@ -41,7 +41,7 @@ Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 %package -n kernel%{_alt_kernel}-net-%{name}
 Summary:	Linux kernel module for WLAN cards based on zd1211 
 Summary(de.UTF-8):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
-Summary(pl.UTF-8):	Modu�~B j�~Edra Linuksa dla kart WLAN na zd1211
+Summary(pl.UTF-8):	Moduł~B jądra Linuksa dla kart WLAN na zd1211
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -56,12 +56,12 @@ This package contains Linux kernel drivers for the WLAN cards based on zd1211.
 Dieses Paket enthält Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 
 %description -n kernel%{_alt_kernel}-net-%{name} -l pl.UTF-8
-Ten pakiet zawiera sterowniki j�~Edra Linuksa dla kart WLAN na zd1211.
+Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 
 %package -n kernel%{_alt_kernel}-smp-net-%{name}
 Summary:	Linux SMP kernel module for the WLAN cards based on zd1211.
 Summary(de.UTF-8):	Linux SMP Kernel Modul für WLAN Netzwerkkarten zd1211
-Summary(pl.UTF-8):	Modu�~B j�~Edra Linuksa SMP dla kart WLAN na zd1211
+Summary(pl.UTF-8):	Moduł jądra Linuksa SMP dla kart WLAN na zd1211
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
@@ -76,7 +76,7 @@ This package contains Linux SMP kernel drivers for the WLAN cards based on zd121
 Dieses Paket enthält Linux SMP Kernel Treiber für WLAN Netzwerkkarten zd1211.
 
 %description -n kernel%{_alt_kernel}-smp-net-%{name} -l pl.UTF-8
-Ten pakiet zawiera sterowniki j�~Edra Linuksa SMP dla kart WLAN opartych na uk�~Badzie zd1211.
+Ten pakiet zawiera sterowniki jądra Linuksa SMP dla kart WLAN opartych na układzie zd1211.
 
 %prep
 %setup -q -n %{_zd1211_name}

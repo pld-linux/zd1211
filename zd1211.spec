@@ -41,7 +41,7 @@ Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 %package -n kernel%{_alt_kernel}-net-%{name}
 Summary:	Linux kernel module for WLAN cards based on zd1211 
 Summary(de.UTF-8):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
-Summary(pl.UTF-8):	Moduł~B jądra Linuksa dla kart WLAN na zd1211
+Summary(pl.UTF-8):	Moduł jądra Linuksa dla kart WLAN na zd1211
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}

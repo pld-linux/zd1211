@@ -49,7 +49,7 @@ diff -urbB zd1211.org/Makefile zd1211/Makefile
 -CFLAGS += -D__SMP__ -DSMP
 -endif
 -
+ CFLAGS += -DZDCONF_WE_STAT_SUPPORT=1
  CFLAGS += -DHOST_IF_USB
  CFLAGS += -DAMAC
- CFLAGS += -DGCCK
 

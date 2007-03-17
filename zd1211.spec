@@ -1,7 +1,11 @@
 #
 #TODO
 #- udev rules
-
+#
+#INFO
+# - Development zd112 is dormant. Please use zd1211rw instead,
+#	 see http://zd1211.ath.cx/wiki/DriverRewrite
+#
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
@@ -10,8 +14,8 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211-driver-r83
-%define		_rel		2
+%define		_zd1211_name	zd1211-driver-r85
+%define		_rel		1
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na układzie zd1211
 Name:		zd1211
@@ -20,7 +24,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
-# Source0-md5:	a5751f0e6f1f368689077fa7758a4932
+# Source0-md5:	51691a15137fbc35515a630d45d03352
 Patch0:		kernel-net-%{name}-build.patch
 URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}

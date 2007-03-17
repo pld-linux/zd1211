@@ -15,7 +15,7 @@
 #
 %define		_zd1211_ver	0.0.2
 %define		_zd1211_name	zd1211-driver-r85
-%define		_rel		1
+%define		_rel		3
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na układzie zd1211
 Name:		zd1211

@@ -1,10 +1,10 @@
 #
 #TODO
-#- udev rules
+# -  udev rules
 #
 #INFO
 # - Development zd112 is dormant. Please use zd1211rw instead,
-#	 see http://zd1211.ath.cx/wiki/DriverRewrite
+#   see http://zd1211.ath.cx/wiki/DriverRewrite
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel

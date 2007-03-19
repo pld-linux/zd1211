@@ -30,6 +30,8 @@ URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.330
 Requires(post,postun):	/sbin/depmod
+ExcludeArch:	sparc
+ExcludeArch:	sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description

@@ -31,8 +31,7 @@ URL:		http://zd1211.ath.cx/
 BuildRequires:	rpmbuild(macros) >= 1.330
 Requires(post,postun):	/sbin/depmod
 Requires:	zd1211-firmware
-ExcludeArch:	sparc
-ExcludeArch:	sparc64
+ExcludeArch:	sparc sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description

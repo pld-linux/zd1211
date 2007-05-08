@@ -1,136 +1,125 @@
 #
 #TODO
-#- udev rules
-
+# -  udev rules
+#
+#INFO
+# - Development zd112 is dormant. Please use zd1211rw instead,
+#   see http://zd1211.ath.cx/wiki/DriverRewrite
+#
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	kernel		# don't build kernel modules
+%bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211-driver-r83
-%define		_rel		2
-Summary:	Linux driver for WLAN cards based on zd1211
-Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych opartych na ukÅ‚adzie zd1211
-Name:		kernel-net-zd1211
+%define		_zd1211_name	zd1211-driver-r85
+%define		_rel		50
+Summary:	Linux driver for USB WLAN cards based on zd1211
+Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na uk³adzie zd1211
+Name:		zd1211
 Version:	%{_zd1211_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
-# Source0-md5:	a5751f0e6f1f368689077fa7758a4932
-Patch0:		%{name}-build.patch
+# Source0-md5:	51691a15137fbc35515a630d45d03352
+Patch0:		kernel-net-%{name}-build.patch
 URL:		http://zd1211.ath.cx/
-%if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
-%{?with_dist_kernel:%requires_releq_kernel_up}
-BuildRequires:	rpmbuild(macros) >= 1.153
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
+BuildRequires:	rpmbuild(macros) >= 1.330
 Requires(post,postun):	/sbin/depmod
-%{?with_dist_kernel:Requires(postun):	kernel}
-%endif
+Requires:	zd1211-firmware
+ExcludeArch:	sparc sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is a Linux driver for WLAN cards based on zd1211.
 
-This package contains Linux UP module.
-
-%description -l pl.UTF-8
-Sterownik dla Linuksa do kart bezprzewodowych opartych na ukÅ‚adzie
+%description -l pl
+Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie
 zd1211.
 
-Ten pakiet zawiera moduÅ‚ jÄ…dra Linuksa UP.
+%description -l de
+Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 
-%package -n kernel-smp-net-zd1211
-Summary:	Linux SMP driver for WLAN cards based on zd1211
-Summary(pl.UTF-8):	Sterownik dla Linuksa SMP do kart bezprzewodowych opartych na ukÅ‚adzie zd1211
+%package -n kernel%{_alt_kernel}-net-%{name}
+Summary:	Linux kernel module for WLAN cards based on zd1211 
+Summary(de):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
+Summary(pl):	Modu³ j±dra Linuksa dla kart WLAN na zd1211
+Release:	%{_rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+%{?with_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
+Requires:	module-init-tools >= 3.2.2-2
+Provides:	%{name}
+
+%description -n kernel%{_alt_kernel}-net-%{name}
+This package contains Linux kernel drivers for the WLAN cards based on zd1211.
+
+%description -n kernel%{_alt_kernel}-net-%{name} -l de
+Dieses Paket enthält Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
+
+%description -n kernel%{_alt_kernel}-net-%{name} -l pl
+Ten pakiet zawiera sterowniki j±dra Linuksa dla kart WLAN na zd1211.
+
+%package -n kernel%{_alt_kernel}-smp-net-%{name}
+Summary:	Linux SMP kernel module for the WLAN cards based on zd1211.
+Summary(de):	Linux SMP Kernel Modul für WLAN Netzwerkkarten zd1211
+Summary(pl):	Modu³ j±dra Linuksa SMP dla kart WLAN na zd1211
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
-%{?with_dist_kernel:Requires(postun):	kernel-smp}
+Requires:	module-init-tools >= 3.2.2-2
+Provides:	%{name}
 
-%description -n kernel-smp-net-zd1211
-This is a Linux driver for WLAN cards based on zd1211.
+%description -n kernel%{_alt_kernel}-smp-net-%{name}
+This package contains Linux SMP kernel drivers for the WLAN cards based on zd1211.
 
-This package contains Linux SMP module.
+%description -n kernel%{_alt_kernel}-smp-net-%{name} -l de
+Dieses Paket enthält Linux SMP Kernel Treiber für WLAN Netzwerkkarten zd1211.
 
-%description -n kernel-smp-net-zd1211 -l pl.UTF-8
-Sterownik dla Linuksa do kart bezprzewodowych opartych na ukÅ‚adzie
-zd1211.
-
-Ten pakiet zawiera moduÅ‚ jÄ…dra Linuksa SMP.
+%description -n kernel%{_alt_kernel}-smp-net-%{name} -l pl
+Ten pakiet zawiera sterowniki j±dra Linuksa SMP dla kart WLAN opartych na uk³adzie zd1211.
 
 %prep
 %setup -q -n %{_zd1211_name}
-#%patch0 -p1
+%patch0 -p1
 
 %build
-# kernel module(s)
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-    fi
-    for t in zd1211 zd1211b; do
-	install -d o/include/linux
-	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
-	%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-
-	%{__make} -C %{_kernelsrcdir} clean \
-		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	%{__make} -C %{_kernelsrcdir} modules \
-		`[ "$t" = "zd1211" ] && echo ZD1211REV_B=0 || echo ZD1211REV_B=1` \
-		CC="%{__cc}" CPP="%{__cpp}" \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-
-		for i in $t; do
-			mv $i{,-$cfg}.ko
-		done
-    done
-done
+%build_kernel_modules -m zd1211
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/net
-for i in zd1211 zd1211b; do
-	install $i-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/$i.ko
-done
-%if %{with smp} && %{with dist_kernel}
-for i in zd1211 zd1211b; do
-	install $i-smp.ko \
-		$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/net/$i.ko
-done
-%endif
+%install_kernel_modules -m zd1211 -d /kernel/drivers/usb/net
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-%depmod %{_kernel_ver}
+%post	-n kernel%{_alt_kernel}-net-%{name}
+%depmod	%{_kernel_ver}
 
-%postun
-%depmod %{_kernel_ver}
+%postun	-n kernel%{_alt_kernel}-net-%{name}
+%depmod	%{_kernel_ver}
 
-%post -n kernel-smp-net-zd1211
-%depmod %{_kernel_ver}smp
+%post	-n kernel%{_alt_kernel}-smp-net-%{name}
+%depmod	%{_kernel_ver}smp
 
-%postun -n kernel-smp-net-zd1211
-%depmod %{_kernel_ver}smp
+%postun	-n kernel%{_alt_kernel}-smp-net-%{name}
+%depmod	%{_kernel_ver}smp
 
-%files
+%if %{with up} || %{without dist_kernel}
+%files -n kernel%{_alt_kernel}-net-%{name}
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/*.ko*
+#%{_sysconfdir}/modprobe.d/%{_kernel_ver}/%{name}.conf
+%endif
 
 %if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-net-zd1211
+%files -n kernel%{_alt_kernel}-smp-net-%{name}
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/net/*.ko*
+#%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/%{name}.conf
 %endif

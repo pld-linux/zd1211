@@ -1,6 +1,7 @@
 #
 #TODO
 # -  udev rules
+# - spec vs name
 #
 #INFO
 # - Development zd112 is dormant. Please use zd1211rw instead,

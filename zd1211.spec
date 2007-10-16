@@ -12,6 +12,12 @@
 %bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
+%bcond_with	grsec_kernel	# build for kernel-grsecurity
+#
+#
+%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
+%define	alt_kernel	grsecurity
+%endif
 #
 %define		_zd1211_ver	0.0.2
 %define		_zd1211_name	zd1211-driver-r85
@@ -20,7 +26,7 @@ Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na uk³adzie zd1211
 Name:		zd1211
 Version:	%{_zd1211_ver}
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{_rel}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz

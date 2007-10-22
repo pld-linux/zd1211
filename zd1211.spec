@@ -13,15 +13,17 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
+
 %if %{without kernel}
 %undefine	with_dist_kernel
 %endif
-#
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
 %endif
-#
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
+%endif
+
 %define		_zd1211_ver	0.0.2
 %define		_zd1211_name	zd1211-driver-r85
 %define		_rel	55

@@ -102,7 +102,7 @@ Ten pakiet zawiera sterowniki j±dra Linuksa SMP dla kart WLAN opartych na uk³adz
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%install_kernel_modules -m zd1211 -d /kernel/drivers/usb/net
+%install_kernel_modules -m zd1211 -d kernel/drivers/usb/net
 
 %clean
 rm -rf $RPM_BUILD_ROOT

@@ -14,6 +14,9 @@
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
 #
+%if %{without kernel}
+%undefine	with_dist_kernel
+%endif
 #
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
@@ -35,8 +38,6 @@ Patch0:		kernel-net-%{name}-build.patch
 URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.330
-Requires(post,postun):	/sbin/depmod
-Requires:	zd1211-firmware
 ExcludeArch:	sparc sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -59,6 +60,7 @@ Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
 Requires:	module-init-tools >= 3.2.2-2
+Requires:	zd1211-firmware
 Provides:	%{name}
 
 %description -n kernel%{_alt_kernel}-net-%{name}
@@ -79,6 +81,7 @@ Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
 Requires:	module-init-tools >= 3.2.2-2
+Requires:	zd1211-firmware
 Provides:	%{name}
 
 %description -n kernel%{_alt_kernel}-smp-net-%{name}

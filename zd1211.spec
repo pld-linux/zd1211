@@ -1,7 +1,6 @@
 #
 #TODO
 # -  udev rules
-# - spec vs name
 #
 #INFO
 # - Development zd112 is dormant. Please use zd1211rw instead,
@@ -16,17 +15,16 @@
 %define	alt_kernel	grsecurity
 %endif
 #
-%define		_zd1211_ver	0.0.2
-%define		_zd1211_name	zd1211-driver-r85
-%define		_rel		3
+%define		zd1211_name	zd1211-driver-r85
+%define		rel		3
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na układzie zd1211
 Name:		zd1211
-Version:	%{_zd1211_ver}
-Release:	%{_rel}
+Version:	0.0.2
+Release:	%{rel}
 License:	GPL v2
 Group:		Base/Kernel
-Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
+Source0:	http://zd1211.ath.cx/download/%{zd1211_name}.tgz
 # Source0-md5:	51691a15137fbc35515a630d45d03352
 Patch0:		kernel-net-%{name}-build.patch
 URL:		http://zd1211.ath.cx/
@@ -51,7 +49,7 @@ Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 Summary:	Linux kernel module for WLAN cards based on zd1211 
 Summary(de.UTF-8):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
 Summary(pl.UTF-8):	Moduł jądra Linuksa dla kart WLAN na zd1211
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
@@ -68,7 +66,7 @@ Dieses Paket enthält Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 
 %prep
-%setup -q -n %{_zd1211_name}
+%setup -q -n %{zd1211_name}
 %patch0 -p1
 
 %build
@@ -89,4 +87,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel%{_alt_kernel}-net-%{name}
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/*.ko*
+/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/zd1211.ko*

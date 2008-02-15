@@ -11,13 +11,9 @@
 %bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
 
 %if %{without kernel}
 %undefine	with_dist_kernel
-%endif
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
 %endif
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
@@ -25,13 +21,12 @@
 
 %define		_zd1211_ver	0.0.2
 %define		_zd1211_name	zd1211-driver-r85
-%define		_rel	61
 %define		pname	zd1211
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na uk³adzie zd1211
 Name:		%{pname}%{_alt_kernel}
 Version:	%{_zd1211_ver}
-Release:	%{_rel}
+Release:	62
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
@@ -57,13 +52,11 @@ Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 Summary:	Linux kernel module for WLAN cards based on zd1211 
 Summary(de):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
 Summary(pl):	Modu³ j±dra Linuksa dla kart WLAN na zd1211
-Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Requires:	module-init-tools >= 3.2.2-2
 Requires:	zd1211-firmware
-Provides:	%{pname}
 
 %description -n kernel%{_alt_kernel}-net-%{pname}
 This package contains Linux kernel drivers for the WLAN cards based on zd1211.
@@ -78,13 +71,11 @@ Ten pakiet zawiera sterowniki j±dra Linuksa dla kart WLAN na zd1211.
 Summary:	Linux SMP kernel module for the WLAN cards based on zd1211.
 Summary(de):	Linux SMP Kernel Modul für WLAN Netzwerkkarten zd1211
 Summary(pl):	Modu³ j±dra Linuksa SMP dla kart WLAN na zd1211
-Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_smp}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Requires:	module-init-tools >= 3.2.2-2
 Requires:	zd1211-firmware
-Provides:	%{pname}
 
 %description -n kernel%{_alt_kernel}-smp-net-%{pname}
 This package contains Linux SMP kernel drivers for the WLAN cards based on zd1211.

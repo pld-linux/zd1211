@@ -26,7 +26,7 @@ Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na uk³adzie zd1211
 Name:		%{pname}%{_alt_kernel}
 Version:	%{_zd1211_ver}
-Release:	62
+Release:	63
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz

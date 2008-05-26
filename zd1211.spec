@@ -32,6 +32,7 @@ Group:		Base/Kernel
 Source0:	http://zd1211.ath.cx/download/%{_zd1211_name}.tgz
 # Source0-md5:	51691a15137fbc35515a630d45d03352
 Patch0:		kernel-net-%{pname}-build.patch
+Patch1:		%{name}-3410.patch
 URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.330
@@ -89,6 +90,7 @@ Ten pakiet zawiera sterowniki j±dra Linuksa SMP dla kart WLAN opartych na uk³adz
 %prep
 %setup -q -n %{_zd1211_name}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %build_kernel_modules -m zd1211

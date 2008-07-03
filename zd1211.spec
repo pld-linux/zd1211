@@ -23,7 +23,7 @@
 %define		_zd1211_name	zd1211-driver-r85
 %define		pname	zd1211
 Summary:	Linux driver for USB WLAN cards based on zd1211
-Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na uk³adzie zd1211
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na ukÅ‚adzie zd1211
 Name:		%{pname}%{_alt_kernel}
 Version:	%{_zd1211_ver}
 Release:	63
@@ -42,17 +42,17 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This is a Linux driver for WLAN cards based on zd1211.
 
-%description -l pl
-Sterownik dla Linuksa do kart bezprzewodowych opartych na uk³adzie
+%description -l pl.UTF-8
+Sterownik dla Linuksa do kart bezprzewodowych opartych na ukÅ‚adzie
 zd1211.
 
-%description -l de
-Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
+%description -l de.UTF-8
+Linux Kernel Treiber fÃ¼r WLAN Netzwerkkarten zd1211.
 
 %package -n kernel%{_alt_kernel}-net-%{pname}
 Summary:	Linux kernel module for WLAN cards based on zd1211 
-Summary(de):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
-Summary(pl):	Modu³ j±dra Linuksa dla kart WLAN na zd1211
+Summary(de.UTF-8):	Linux Kernel Modul fÃ¼r WLAN Netzwerkkarten zd1211
+Summary(pl.UTF-8):	ModuÅ‚ jÄ…dra Linuksa dla kart WLAN na zd1211
 Group:		Base/Kernel
 %{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
@@ -62,16 +62,16 @@ Requires:	zd1211-firmware
 %description -n kernel%{_alt_kernel}-net-%{pname}
 This package contains Linux kernel drivers for the WLAN cards based on zd1211.
 
-%description -n kernel%{_alt_kernel}-net-%{pname} -l de
-Dieses Paket enthält Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
+%description -n kernel%{_alt_kernel}-net-%{pname} -l de.UTF-8
+Dieses Paket enthÃ¤lt Linux Kernel Treiber fÃ¼r WLAN Netzwerkkarten zd1211.
 
-%description -n kernel%{_alt_kernel}-net-%{pname} -l pl
-Ten pakiet zawiera sterowniki j±dra Linuksa dla kart WLAN na zd1211.
+%description -n kernel%{_alt_kernel}-net-%{pname} -l pl.UTF-8
+Ten pakiet zawiera sterowniki jÄ…dra Linuksa dla kart WLAN na zd1211.
 
 %package -n kernel%{_alt_kernel}-smp-net-%{pname}
 Summary:	Linux SMP kernel module for the WLAN cards based on zd1211.
-Summary(de):	Linux SMP Kernel Modul für WLAN Netzwerkkarten zd1211
-Summary(pl):	Modu³ j±dra Linuksa SMP dla kart WLAN na zd1211
+Summary(de.UTF-8):	Linux SMP Kernel Modul fÃ¼r WLAN Netzwerkkarten zd1211
+Summary(pl.UTF-8):	ModuÅ‚ jÄ…dra Linuksa SMP dla kart WLAN na zd1211
 Group:		Base/Kernel
 %{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
@@ -81,11 +81,11 @@ Requires:	zd1211-firmware
 %description -n kernel%{_alt_kernel}-smp-net-%{pname}
 This package contains Linux SMP kernel drivers for the WLAN cards based on zd1211.
 
-%description -n kernel%{_alt_kernel}-smp-net-%{pname} -l de
-Dieses Paket enthält Linux SMP Kernel Treiber für WLAN Netzwerkkarten zd1211.
+%description -n kernel%{_alt_kernel}-smp-net-%{pname} -l de.UTF-8
+Dieses Paket enthÃ¤lt Linux SMP Kernel Treiber fÃ¼r WLAN Netzwerkkarten zd1211.
 
-%description -n kernel%{_alt_kernel}-smp-net-%{pname} -l pl
-Ten pakiet zawiera sterowniki j±dra Linuksa SMP dla kart WLAN opartych na uk³adzie zd1211.
+%description -n kernel%{_alt_kernel}-smp-net-%{pname} -l pl.UTF-8
+Ten pakiet zawiera sterowniki jÄ…dra Linuksa SMP dla kart WLAN opartych na ukÅ‚adzie zd1211.
 
 %prep
 %setup -q -n %{_zd1211_name}

@@ -20,6 +20,9 @@
 %undefine	with_userspace
 %endif
 
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+
 %define		zd1211_name	zd1211-driver-r85
 %define		rel		64
 %define		pname	zd1211

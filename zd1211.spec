@@ -24,7 +24,7 @@
 %define		_enable_debug_packages	0
 
 %define		zd1211_name	zd1211-driver-r85
-%define		rel		65
+%define		rel		66
 %define		pname	zd1211
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na układzie zd1211
@@ -57,7 +57,7 @@ Linux Kernel Treiber für WLAN Netzwerkkarten zd1211.
 Summary:	Linux kernel module for WLAN cards based on zd1211
 Summary(de.UTF-8):	Linux Kernel Modul für WLAN Netzwerkkarten zd1211
 Summary(pl.UTF-8):	Moduł jądra Linuksa dla kart WLAN na zd1211
-Release:	%{rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 %{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
@@ -79,6 +79,7 @@ Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 Summary:	Linux SMP kernel module for the WLAN cards based on zd1211
 Summary(de.UTF-8):	Linux SMP Kernel Modul für WLAN Netzwerkkarten zd1211
 Summary(pl.UTF-8):	Moduł jądra Linuksa SMP dla kart WLAN na zd1211
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 %{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}

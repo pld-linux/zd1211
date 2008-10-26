@@ -1,0 +1,94 @@
+--- zd1211-driver-r85/src/zd1205.c~	2007-02-25 00:31:17.000000000 +0100
++++ zd1211-driver-r85/src/zd1205.c	2008-10-21 00:12:46.929439356 +0200
+@@ -4159,7 +4159,11 @@ defrag_comp:
+                         skb->tail = skb->data = pHdr;
+                         /* ath_desc: fix monitor mode frame length */
+                         skb_put(skb, data_sz - PLCP_HEADER - EXTRA_INFO_LEN - CRC32_LEN);
+-                        skb->mac.raw = skb->data;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 22)
++			skb->mac.raw = skb->data;
++#else
++			skb->mac_header = skb->data;
++#endif
+                         skb->pkt_type = PACKET_OTHERHOST;
+                         skb->protocol = __constant_htons(ETH_P_802_2);
+                         skb->dev = dev;
+--- zd1211-driver-r85/src/zd1205.h~	2007-02-25 00:31:17.000000000 +0100
++++ zd1211-driver-r85/src/zd1205.h	2008-10-21 00:30:42.732728278 +0200
+@@ -613,7 +613,7 @@ struct driver_stats
+ {
+         struct net_device_stats net_stats;
+ /* ath_desc: added iw_get_stats */
+-#ifdef CONFIG_NET_WIRELESS
++#if WIRELESS_EXT > 12
+         struct iw_statistics iw_stats;
+ #endif
+         unsigned long tx_late_col;
+--- zd1211-driver-r85/src/zd1205.c	2008-10-21 00:43:42.909254257 +0200
++++ zd1211-driver-r85/src/zd1205.c	2008-10-21 00:43:31.375923560 +0200
+@@ -9397,6 +9397,15 @@
+         //dev_kfree_skb_irq(skb);
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 23)
++static inline void eth_copy_and_sum (struct sk_buff *dest,
++				     const unsigned char *src,
++				     int len, int base)                                            
++{
++	memcpy (dest->data, src, len);
++}
++#endif
++
+ void zdcb_rx_ind(U8 *pData, U32 length, void *buf)
+ {
+         struct zd1205_private *macp = g_dev->priv;
+--- zd1211-driver-r85/src/zd1205_proc.c~	2007-02-25 00:31:17.000000000 +0100
++++ zd1211-driver-r85/src/zd1205_proc.c	2008-10-21 00:59:42.475825424 +0200
+@@ -328,7 +328,11 @@ zd1205_init_proc_dir(void)
+ 
+         /* first check if adapters_proc_dir already exists */
+         len = strlen(ADAPTERS_PROC_DIR);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)
++        for (adapters_proc_dir = init_net.proc_net->subdir;
++#else
+         for (adapters_proc_dir = proc_net->subdir;
++#endif
+                         adapters_proc_dir; adapters_proc_dir = adapters_proc_dir->next) {
+ 
+                 if ((adapters_proc_dir->namelen == len) &&
+@@ -338,7 +342,11 @@ zd1205_init_proc_dir(void)
+ 
+         if (!adapters_proc_dir)
+                 adapters_proc_dir =
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)
++                        create_proc_entry(ADAPTERS_PROC_DIR, S_IFDIR, init_net.proc_net);
++#else
+                         create_proc_entry(ADAPTERS_PROC_DIR, S_IFDIR, proc_net);
++#endif
+ 
+         if (!adapters_proc_dir)
+                 return false;
+@@ -376,7 +384,11 @@ zd1205_proc_cleanup(void)
+         if (de)
+                 return;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)
++        remove_proc_entry(ADAPTERS_PROC_DIR, init_net.proc_net);
++#else
+         remove_proc_entry(ADAPTERS_PROC_DIR, proc_net);
++#endif
+         adapters_proc_dir = NULL;
+ }
+ 
+--- zd1211-driver-r85/src/zdusb.c~	2007-02-25 00:31:21.000000000 +0100
++++ zd1211-driver-r85/src/zdusb.c	2008-10-21 01:01:43.882573564 +0200
+@@ -255,7 +255,9 @@ static int zd1211_probe(struct usb_inter
+ 
+         macp->device = net;
+         macp->usb = dev;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
+         SET_MODULE_OWNER(net);
++#endif
+         macp->dev_index = dev_index;
+         /* ath_desc: bigendian support */
+         /* ath: USB config fields are le16 on kernels >= 2.6.11 only */

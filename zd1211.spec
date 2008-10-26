@@ -31,9 +31,9 @@ License:	GPL v2
 Group:		Base/Kernel
 Source0:	%{zd1211_name}.tar.bz2
 # Source0-md5:	20569b84770f011c78b47dc4030548a5
-Patch0:		%{name}-build.patch
-Patch1:		%{name}-3410.patch
-Patch2:		%{name}-2.6.22.patch
+Patch0:		%{pname}-build.patch
+Patch1:		%{pname}-3410.patch
+Patch2:		%{pname}-2.6.22.patch
 URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 BuildRequires:	rpmbuild(macros) >= 1.330

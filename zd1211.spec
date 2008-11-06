@@ -34,8 +34,9 @@ Source0:	%{zd1211_name}.tar.bz2
 Patch0:		%{pname}-build.patch
 Patch1:		%{pname}-3410.patch
 Patch2:		%{pname}-2.6.22.patch
+Patch3:		%{pname}-2.6.27.patch
 URL:		http://zd1211.ath.cx/
-%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.27}
 BuildRequires:	rpmbuild(macros) >= 1.330
 ExcludeArch:	sparc sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -77,6 +78,7 @@ Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %build_kernel_modules -m zd1211

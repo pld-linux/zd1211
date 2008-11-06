@@ -1,0 +1,132 @@
+diff -upr zd1211-driver-r85./src/zd1205.c zd1211-driver-r85/src/zd1205.c
+--- zd1211-driver-r85./src/zd1205.c	2008-11-06 20:17:05.274065388 +0100
++++ zd1211-driver-r85/src/zd1205.c	2008-11-06 20:23:47.981316701 +0100
+@@ -7114,7 +7114,8 @@ encode_ie(void *buf, size_t bufsize,
+ static char *zd1205_translate_scan(struct net_device *dev,
+                                    char *current_ev,
+                                    char *end_buf,
+-                                   bss_info_t *list)
++                                   bss_info_t *list,
++				   struct iw_request_info *info)
+ {
+         struct iw_event	iwe;		/* Temporary buffer */
+         u16	capabilities;
+@@ -7132,7 +7133,7 @@ static char *zd1205_translate_scan(struc
+         iwe.cmd = SIOCGIWAP;
+         iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
+         memcpy(iwe.u.ap_addr.sa_data, list->bssid, ETH_ALEN);
+-        current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe, IW_EV_ADDR_LEN);
++        current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe, IW_EV_ADDR_LEN);
+ 
+         /* Other entries will be displayed in the order we give them */
+ 
+@@ -7142,7 +7143,7 @@ static char *zd1205_translate_scan(struc
+                 iwe.u.data.length = 32;
+         iwe.cmd = SIOCGIWESSID;
+         iwe.u.data.flags = 1;
+-        current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, &list->ssid[2]);
++        current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, &list->ssid[2]);
+ 
+         /* Add mode */
+         iwe.cmd = SIOCGIWMODE;
+@@ -7154,7 +7155,7 @@ static char *zd1205_translate_scan(struc
+ 
+                 else
+                         iwe.u.mode = IW_MODE_ADHOC;
+-                current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe, IW_EV_UINT_LEN);
++                current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe, IW_EV_UINT_LEN);
+         }
+ 
+         /* Add frequency */
+@@ -7167,7 +7168,7 @@ static char *zd1205_translate_scan(struc
+                 iwe.u.freq.m = channel_11A_to_Freq(iwe.u.freq.m) * 100000;
+         }
+         iwe.u.freq.e = 1;
+-        current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe, IW_EV_FREQ_LEN);
++        current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe, IW_EV_FREQ_LEN);
+ 
+ #if WIRELESS_EXT < 15
+         /* Add quality statistics */
+@@ -7180,7 +7181,7 @@ static char *zd1205_translate_scan(struc
+         iwe.u.qual.level = Tmp;
+         iwe.u.qual.noise = 0;
+         iwe.u.qual.qual = list->signalQuality;
+-        current_ev = iwe_stream_add_event(current_ev, end_buf, &iwe, IW_EV_QUAL_LEN);
++        current_ev = iwe_stream_add_event(info, current_ev, end_buf, &iwe, IW_EV_QUAL_LEN);
+ #else
+         // Transform Signal quality from level to percentage
+         memset(&iwe, 0, sizeof(iwe));
+@@ -7192,7 +7193,7 @@ static char *zd1205_translate_scan(struc
+ 
+         snprintf(buf, sizeof(buf), "SignalStrength=%lu%%,LinkQuality:%d%%", Tmp,list->signalQuality);
+         iwe.u.data.length = strlen(buf);
+-        current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, buf);
++        current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, buf);
+ #endif
+         //
+         /* Add encryption capability */
+@@ -7203,7 +7204,7 @@ static char *zd1205_translate_scan(struc
+         else
+                 iwe.u.data.flags = IW_ENCODE_DISABLED;
+         iwe.u.data.length = 0;
+-        current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, list->ssid);
++        current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, list->ssid);
+ 
+         /* Rate : stuffing multiple values in a single event require a bit
+          * more of magic */
+@@ -7221,7 +7222,7 @@ static char *zd1205_translate_scan(struc
+                 /* Bit rate given in 500 kb/s units (+ 0x80) */
+                 iwe.u.bitrate.value = ((list->supRates[i+2] & 0x7f) * 500000);
+                 /* Add new value to event */
+-                current_val = iwe_stream_add_value(current_ev, current_val, end_buf, &iwe, IW_EV_PARAM_LEN);
++                current_val = iwe_stream_add_value(info, current_ev, current_val, end_buf, &iwe, IW_EV_PARAM_LEN);
+         }
+ 
+         if (list->apMode != PURE_B_AP)
+@@ -7230,7 +7231,7 @@ static char *zd1205_translate_scan(struc
+                         /* Bit rate given in 500 kb/s units (+ 0x80) */
+                         iwe.u.bitrate.value = ((list->extRates[i+2] & 0x7f) * 500000);
+                         /* Add new value to event */
+-                        current_val = iwe_stream_add_value(current_ev, current_val, end_buf, &iwe, IW_EV_PARAM_LEN);
++                        current_val = iwe_stream_add_value(info, current_ev, current_val, end_buf, &iwe, IW_EV_PARAM_LEN);
+                 }
+         }
+ 
+@@ -7246,7 +7247,7 @@ static char *zd1205_translate_scan(struc
+         iwe.cmd = IWEVCUSTOM;
+         snprintf(buf, sizeof(buf), "bcn_int=%d", list->beaconInterval);
+         iwe.u.data.length = strlen(buf);
+-        current_ev = iwe_stream_add_point(current_ev, end_buf, &iwe, buf);
++        current_ev = iwe_stream_add_point(info, current_ev, end_buf, &iwe, buf);
+ 
+         if (list->WPAIe[1] != 0)
+         {
+@@ -7264,7 +7265,7 @@ static char *zd1205_translate_scan(struc
+                                                       list->WPAIe, list->WPAIe[1]+2,
+                                                       wpa_leader, sizeof(wpa_leader)-1);
+                 if (iwe.u.data.length != 0)
+-                        current_ev = iwe_stream_add_point(current_ev, end_buf,
++                        current_ev = iwe_stream_add_point(info, current_ev, end_buf,
+                                                           &iwe, buf);
+         }
+         if (list->RSNIe[1] != 0)
+@@ -7277,7 +7278,7 @@ static char *zd1205_translate_scan(struc
+                                                       list->RSNIe, list->RSNIe[1]+2,
+                                                       rsn_leader, sizeof(rsn_leader)-1);
+                         if (iwe.u.data.length != 0)
+-                                current_ev = iwe_stream_add_point(current_ev, end_buf,	&iwe, buf);
++                                current_ev = iwe_stream_add_point(info, current_ev, end_buf,	&iwe, buf);
+                 }
+         }
+ 
+@@ -7310,7 +7311,8 @@ static int zd1205wext_giwscan(struct net
+                 /* Translate to WE format this entry */
+                 current_ev = zd1205_translate_scan(dev, current_ev,
+                                                    extra + IW_SCAN_MAX_DATA,
+-                                                   &macp->BSSInfo[i]);
++                                                   &macp->BSSInfo[i],
++						   info);
+ 
+         }
+ 
+Only in zd1211-driver-r85/src: zd1205.c~

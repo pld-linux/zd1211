@@ -85,17 +85,17 @@ Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%install_kernel_modules -m zd1211 -d /kernel/drivers/usb/net
+%install_kernel_modules -m zd1211 -d /kernel/drivers/net/usb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-n kernel%{_alt_kernel}-net-%{name}
+%post	-n kernel%{_alt_kernel}-net-%{pname}
 %depmod	%{_kernel_ver}
 
-%postun	-n kernel%{_alt_kernel}-net-%{name}
+%postun	-n kernel%{_alt_kernel}-net-%{pname}
 %depmod	%{_kernel_ver}
 
-%files -n kernel%{_alt_kernel}-net-%{name}
+%files -n kernel%{_alt_kernel}-net-%{pname}
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/kernel/drivers/usb/net/zd1211.ko*
+/lib/modules/%{_kernel_ver}/kernel/drivers/net/usb/zd1211.ko*

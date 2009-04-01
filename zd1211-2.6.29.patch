@@ -1,0 +1,926 @@
+diff -upr zd1211-driver-r85./src/zd1205.c zd1211-driver-r85/src/zd1205.c
+--- zd1211-driver-r85./src/zd1205.c	2009-04-01 19:19:52.480901520 +0200
++++ zd1211-driver-r85/src/zd1205.c	2009-04-01 20:07:33.083943252 +0200
+@@ -701,7 +701,11 @@ u8 a_OSC_get_cal_int( u8 ch, u32 rate, u
+ /* ath: gcc4 needs inline function bodies in the declaration */
+ inline void zd_writel(u32 value, u32 offset)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
+ 	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 	void *regp = macp->regp;
+ 	u32 RegWait = 0;
+ 
+@@ -741,7 +745,11 @@ inline void zd_writel(u32 value, u32 off
+ 
+ u32 zd_readl(u32 offset)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
+ 	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 	void *regp = macp->regp;
+ 	u32	value;
+ 	u32	RegWait = 0;
+@@ -874,7 +882,11 @@ void zd1205_disable_int(void)
+ 
+ void zd1205_enable_int(void)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+         zd_writel(macp->intrMask, InterruptCtrl);
+ }
+@@ -1287,8 +1299,11 @@ void zd1205_connect_mon(struct zd1205_pr
+ 
+ void zd1205_mgt_mon_cb(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+ #ifdef HOST_IF_USB
+ 
+@@ -1588,7 +1603,11 @@ void zd1205_house_keeping(struct zd1205_
+ 
+ void HKeepingCB(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+ #ifdef HOST_IF_USB
+ 
+@@ -4357,7 +4376,11 @@ exit:
+ int
+ zd1205_open(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         int rc = 0;
+ 
+         ZENTER(0);
+@@ -4732,7 +4755,11 @@ zd1205_setup_tcb_pool(struct zd1205_priv
+ struct net_device_stats *
+                         zd1205_get_stats(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         macp->drv_stats.net_stats.tx_errors =
+                 macp->drv_stats.net_stats.tx_carrier_errors +
+@@ -4783,7 +4810,11 @@ struct net_device_stats *
+ #if WIRELESS_EXT > 12
+ struct iw_statistics *zd1205wext_iw_get_stats(struct net_device *dev)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
+ 	struct zd1205_private *macp = dev->priv;
++#endif
+ 	struct iw_statistics *iw_stats = &macp->drv_stats.iw_stats;
+ 
+ 	iw_stats->qual.noise = 0;
+@@ -4827,7 +4858,11 @@ zd1205_set_mac(struct net_device *dev, v
+         struct sockaddr *p_sockaddr = (struct sockaddr *) addr;
+ 
+ 
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+         read_lock(&(macp->isolate_lock));
+ 
+         if (macp->driver_isolated)
+@@ -4901,7 +4936,11 @@ zd1205_change_mtu(struct net_device *dev
+ int
+ zd1205_close(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         ZENTER(0);
+ 
+@@ -5004,7 +5043,11 @@ zd1205_xmit_frame(struct sk_buff *skb, s
+ {
+         int rc = 0;
+         int notify_stop = false;
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         u16 TypeLen;
+         u8 *pHdr = skb->data;
+@@ -5649,7 +5692,11 @@ void zd1211_set_multicast(struct zd1205_
+ 
+ void zd1205_set_multi(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+ #ifdef HOST_IF_USB
+ 
+@@ -5813,7 +5860,11 @@ zd1205_watchdog(struct zd1205_private *m
+ void
+ zd1205_watchdog_cb(struct net_device *dev)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+ #ifdef HOST_IF_USB
+ 
+@@ -6143,7 +6194,11 @@ static int
+ zd1205_ioctl_setiwencode(struct net_device *dev, struct iw_point *erq, char *key)
+ {
+         //BOOLEAN bReconnect=FALSE;
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         card_Setting_t *pSetting = &macp->cardSetting;
+ 
+         if (erq->length > 0)
+@@ -6264,7 +6319,11 @@ zd1205_ioctl_getiwencode(struct net_devi
+ 
+ 
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         card_Setting_t *pSetting = &macp->cardSetting;
+ 
+ 
+@@ -6310,7 +6369,11 @@ zd1205_ioctl_getiwencode(struct net_devi
+ static int
+ zd1205_ioctl_setessid(struct net_device *dev, struct iw_point *erq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         char essidbuf[IW_ESSID_MAX_SIZE+1];
+ 
+ 
+@@ -6351,7 +6414,11 @@ zd1205_ioctl_setbssid(struct net_device 
+ static int
+ zd1205_ioctl_getessid(struct net_device *dev, struct iw_point *erq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         char essidbuf[IW_ESSID_MAX_SIZE+1];
+         u8 len;
+ 
+@@ -6387,7 +6454,11 @@ zd1205_ioctl_getessid(struct net_device 
+ static int
+ zd1205_ioctl_setfreq(struct net_device *dev, struct iw_freq *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         int chan = -1;
+         int fflag=0; //Found Flag
+ 
+@@ -6455,7 +6526,11 @@ zd1205_ioctl_setfreq(struct net_device *
+ static int
+ zd1205_ioctl_setrts(struct net_device *dev, struct iw_param *rrq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         int val = rrq->value;
+ 
+         if (rrq->disabled)
+@@ -6476,7 +6551,11 @@ zd1205_ioctl_setrts(struct net_device *d
+ static int
+ zd1205_ioctl_setfrag(struct net_device *dev, struct iw_param *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         int err = 0;
+ 
+@@ -6501,7 +6580,11 @@ zd1205_ioctl_setfrag(struct net_device *
+ static int
+ zd1205_ioctl_getfrag(struct net_device *dev, struct iw_param *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         u16 val;
+ 
+@@ -6525,8 +6608,11 @@ zd1205_ioctl_setrate(struct net_device *
+ static int
+ zd1205_ioctl_getrate(struct net_device *dev, struct iw_param *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
+-
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         frq->fixed = 0;
+         frq->disabled = 0;
+@@ -6647,7 +6733,11 @@ zd1205_ioctl_gettxpower(struct net_devic
+ static int
+ zd1205_ioctl_setpower(struct net_device *dev, struct iw_param *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         int err = 0;
+ 
+@@ -6676,7 +6766,11 @@ zd1205_ioctl_setpower(struct net_device 
+ static int
+ zd1205_ioctl_getpower(struct net_device *dev, struct iw_param *frq)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         zd1205_lock(macp);
+         if (macp->bPSMSupported)
+@@ -6706,7 +6800,11 @@ zd1205_hw_get_freq(struct zd1205_private
+ 
+ static int zd1205_ioctl_setmode(struct net_device *dev, __u32 *mode)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+         zd1205_lock(macp);
+         
+@@ -6808,7 +6906,11 @@ static int zd1205wext_giwfreq(struct net
+         if(!netif_running(dev))
+                 return -EINVAL;
+ 
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+         freq->m = zd1205_hw_get_freq(macp);
+         freq->e = 1;
+         return 0;
+@@ -6824,7 +6926,11 @@ static int zd1205wext_siwmode(struct net
+ 
+ static int zd1205wext_giwmode(struct net_device *dev, struct iw_request_info *info, __u32 *mode, char *extra)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         u8 BssType = macp->cardSetting.BssType;
+ 
+         if(!netif_running(dev))
+@@ -6870,7 +6976,11 @@ static int zd1205wext_giwrate(struct net
+ static int zd1205wext_giwrts(struct net_device *dev, struct iw_request_info *info, struct iw_param *rts, char *extra)
+ {
+         struct zd1205_private *macp;
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+ 
+         if(!netif_running(dev))
+                 return -EINVAL;
+@@ -6990,7 +7100,11 @@ static int zd1205wext_commit(struct net_
+ {
+ 	struct zd1205_private *macp;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
+ 	macp = dev->priv;
++#endif
+ 	defer_kevent(macp, KEVENT_UPDATE_SETTING);
+ 	return 0;
+ }
+@@ -7004,7 +7118,11 @@ static int zd1205wext_siwscan(struct net
+         //u32 ul_mac_ps_state;
+         //u16 channel;
+         //BOOLEAN ProbeWithSsid_bak;
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         u32 wait_cnt = 0;
+ 
+         if(!netif_running(dev))
+@@ -7292,7 +7410,11 @@ static char *zd1205_translate_scan(struc
+ 
+ static int zd1205wext_giwscan(struct net_device *dev, struct iw_request_info *info, struct iw_point *data, char *extra)
+ {
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+         char *current_ev = extra;
+         int i;
+ 
+@@ -7540,7 +7662,11 @@ static int zd1211_set_auth_param(struct 
+ 	int result;
+ 	struct zd1205_private *macp;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = net_dev->ml_priv;
++#else
+ 	macp = net_dev->priv;
++#endif
+ 	result = -EINVAL;
+ 	switch(idx) {
+ 	case IW_AUTH_WPA_VERSION:
+@@ -7772,7 +7898,11 @@ zd1205_ioctl(struct net_device *dev, str
+         int err = 0;
+         int changed = 0;
+ 
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+         regp = macp->regp;
+ 
+         /* ath_desc: ifconfig up fix - another try */
+@@ -8532,7 +8662,11 @@ zd1205_init(struct zd1205_private *macp)
+         macp->bAllowAccessRegister = 1;
+ #endif
+         /* read the MAC address from the eprom */
+-        mTxOFDMType = &(((struct zd1205_private *)g_dev->priv)->TxOFDMType);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	mTxOFDMType = &(((struct zd1205_private *)g_dev->ml_priv)->TxOFDMType);
++#else
++	mTxOFDMType = &(((struct zd1205_private *)g_dev->priv)->TxOFDMType);
++#endif
+         zd1205_rd_eaddr(macp);
+ 
+         zd_writel(0x01, AfterPNP);
+@@ -8754,7 +8888,11 @@ zd1205_found1(struct pci_dev *pcid, cons
+                 printk(KERN_NOTICE "\n");
+         }
+ 
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+         macp->pdev = pcid;
+         macp->device = dev;
+ 
+@@ -8880,7 +9018,11 @@ void
+ zd1205_clear_structs(struct net_device *dev)
+ {
+ #ifndef HOST_IF_USB
+-        struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else
++	struct zd1205_private *macp = dev->priv;
++#endif
+ #endif
+ 
+         zd1205_sw_release();
+@@ -8911,7 +9053,11 @@ zd1205_remove1(struct pci_dev *pcid)
+ 
+                 return;
+ 
+-        macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	macp = dev->ml_priv;
++#else
++	macp = dev->priv;
++#endif
+         unregister_netdev(dev);
+         zd1205_remove_proc_subdir(macp);
+         zd1205_clear_structs(dev);
+@@ -8977,7 +9123,11 @@ module_exit(zd1205_cleanup_module);
+ /*************************************************************************/
+ BOOLEAN zdcb_setup_next_send(fragInfo_t *frag_info)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         struct sk_buff *skb = (struct sk_buff *)frag_info->buf;
+         U8 bIntraBss =  frag_info->bIntraBss;
+         U8 MsgID = frag_info->msgID;
+@@ -9414,7 +9564,11 @@ static inline void eth_copy_and_sum (str
+ 
+ void zdcb_rx_ind(U8 *pData, U32 length, void *buf)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         struct sk_buff *skb = (struct sk_buff *)buf;
+ 
+         ZENTER(3);
+@@ -9462,7 +9616,11 @@ void zdcb_rx_ind(U8 *pData, U32 length, 
+ 
+ U16 zdcb_status_notify(U16 status, U8 *StaAddr)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         U16 result = 0;
+         int newassoc = 0;
+ 
+@@ -9562,7 +9720,11 @@ void zdcb_tx_completed(void)
+ void chal_tout_cb(unsigned long ptr)
+ {
+ #ifdef HOST_IF_USB
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         defer_kevent(macp, KEVENT_TCHAL_TIMEOUT);
+ #else
+ 
+@@ -9573,7 +9735,11 @@ void chal_tout_cb(unsigned long ptr)
+ void scan_tout_cb(unsigned long ptr)
+ {
+ #ifdef HOST_IF_USB
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         defer_kevent(macp, KEVENT_SCAN_TIMEOUT);
+ #else
+ 
+@@ -9584,7 +9750,11 @@ void scan_tout_cb(unsigned long ptr)
+ void asoc_tout_cb(unsigned long ptr)
+ {
+ #ifdef HOST_IF_USB
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         defer_kevent(macp, KEVENT_AUTH_TIMEOUT);
+ #else
+ 
+@@ -9595,7 +9765,11 @@ void asoc_tout_cb(unsigned long ptr)
+ void auth_tout_cb(unsigned long ptr)
+ {
+ #ifdef HOST_IF_USB
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         defer_kevent(macp, KEVENT_AUTH_TIMEOUT);
+ #else
+ 
+@@ -9605,7 +9779,11 @@ void auth_tout_cb(unsigned long ptr)
+ 
+ void zdcb_start_timer(U32 timeout, U32 event)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         u32	timeout_in_jiffies;
+         if (!macp->bUSBDeveiceAttached)
+                 return;
+@@ -9652,7 +9830,11 @@ void zdcb_start_timer(U32 timeout, U32 e
+ 
+ void zdcb_stop_timer(U32 TimerId)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+         switch (TimerId) {
+         case DO_CHAL:
+@@ -9678,7 +9860,11 @@ void zdcb_stop_timer(U32 TimerId)
+ U32
+ zdcb_dis_intr(void)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         U32 flags = 0;
+ 
+ #if 1//ndef HOST_IF_USB
+@@ -9695,7 +9881,11 @@ zdcb_dis_intr(void)
+ void
+ zdcb_set_intr_mask(U32 flags)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+ #if 1//ndef HOST_IF_USB
+ 
+@@ -9724,7 +9914,11 @@ U32 zdcb_get_reg(void *reg, U32 offset)
+ BOOLEAN
+ zdcb_check_tcb_avail(U8	num_of_frag)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         BOOLEAN ret;
+ 
+         U32 flags;
+@@ -9747,7 +9941,11 @@ zdcb_check_tcb_avail(U8	num_of_frag)
+ 
+ void zdcb_delay_us(U16 ustime)
+ {
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         interruptible_sleep_on_timeout(&macp->msdelay, ustime/1000);
+         //udelay(ustime);
+ }
+@@ -9781,13 +9979,21 @@ int zdcb_Rand(U32 seed)
+ 
+ void zdcb_AcquireDoNotSleep(void)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         atomic_inc(&macp->DoNotSleep);
+ }
+ 
+ void zdcb_ReleaseDoNotSleep(void)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         atomic_dec(&macp->DoNotSleep);
+ }
+ #ifdef HOSTAPD_SUPPORT
+@@ -10385,8 +10591,13 @@ void ChangeMacMode(u8 MAC_Mode, u8 Chann
+ {
+         struct zd1205_private *macp;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++        if(NULL != g_dev && NULL != g_dev->ml_priv)
++                macp = (struct zd1205_private *)g_dev->ml_priv;
++#else
+         if(NULL != g_dev && NULL != g_dev->priv)
+                 macp = (struct zd1205_private *)g_dev->priv;
++#endif
+         else {
+                 LongPrint("NULL macp in ChnageMacMode\n",1);
+                 return;
+@@ -10408,7 +10619,11 @@ void ChangeMacMode(u8 MAC_Mode, u8 Chann
+ struct iw_statistics *
+                         zd1205_iw_getstats(struct net_device *dev)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++        struct zd1205_private *macp = (struct zd1205_private *)dev->ml_priv;
++#else
+         struct zd1205_private *macp = (struct zd1205_private *)dev->priv;
++#endif
+ 
+         macp->iwstats.discard.fragment = macp->ArAgedCnt
+                                          + macp->ArFreeFailCnt;
+diff -upr zd1211-driver-r85./src/zd1211.c zd1211-driver-r85/src/zd1211.c
+--- zd1211-driver-r85./src/zd1211.c	2007-02-25 00:31:17.000000000 +0100
++++ zd1211-driver-r85/src/zd1211.c	2009-04-01 20:07:33.083943252 +0200
+@@ -490,7 +490,11 @@ out:
+ // return 0: success
+ int zd1211_USB_PACKAGE_READ_REGISTER(u16 *Address, u16 *pValue, u16 RegCount, u8 bAddUSBCSRAddress)
+ {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         u8 *pRegBuffer = NULL;
+         int ret = 0;
+         u16 size = sizeof(USB_READ_REG_REQ);
+@@ -632,7 +636,11 @@ out:
+ }
+ 
+ u32 zd1211_readl(u32 Address, u8 bAddUSBCSRAddress) {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+         u16  ReadAddr[2];
+         u16  ReadData[2];
+@@ -668,7 +676,11 @@ u32 zd1211_readl(u32 Address, u8 bAddUSB
+ 
+ //return 0: success
+ int zd1211_USB_PACKAGE_WRITE_REGISTER(u16 *Address, u16 *Value, u16 RegCount, u8 bAddUSBCSRAddress) {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         u8 *pRegBuffer = NULL;
+         int ret;
+         u16 size = sizeof(USB_WRITE_REG);
+@@ -771,7 +783,11 @@ int zd1211_WriteMultiRegister(u16 *Addre
+ 
+ //return 0: success
+ int zd1211_writel(u32 Address, u32 Value, u8 bAddUSBCSRAddress) {
+-        struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ #ifdef fQuickPhySet
+ 
+         u8	bIsPhyReg = 0;
+@@ -1625,7 +1641,11 @@ void FlashProgram(struct zd1205_private 
+ #endif
+ 
+                           int zd1211_USB_SET_RF_REG(u16 *InputValue, int bIs3683A) {
+-                                  struct zd1205_private *macp = g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+                                   u8 *pRegBuffer = NULL;
+                                   int ret;
+@@ -1758,7 +1778,11 @@ void FlashProgram(struct zd1205_private 
+                           }
+ 
+                           static void zd1211_tx_timeout(struct net_device *dev) {
+-                                  struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else  
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+                                   if (!macp)
+                                           return;
+@@ -1773,7 +1797,11 @@ void FlashProgram(struct zd1205_private 
+                           }
+ 
+                           int zd1211_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) {
+-                                  struct zd1205_private *macp = dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = dev->ml_priv;
++#else  
++	struct zd1205_private *macp = dev->priv;
++#endif
+ 
+                                   memcpy(&macp->ifreq, ifr, sizeof(struct ifreq));
+                                   macp->ifcmd = cmd;
+diff -upr zd1211-driver-r85./src/zdasocsvc.c zd1211-driver-r85/src/zdasocsvc.c
+--- zd1211-driver-r85./src/zdasocsvc.c	2006-02-13 13:50:12.000000000 +0100
++++ zd1211-driver-r85/src/zdasocsvc.c	2009-04-01 20:07:33.083943252 +0200
+@@ -95,7 +95,11 @@ BOOLEAN DisasocReq(Signal_t *signal)
+ 
+ BOOLEAN Re_Asociate(Signal_t *signal)
+ {
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         Hash_t	*pHash;
+         FrmDesc_t *pfrmDesc;
+         Frame_t *rdu;
+diff -upr zd1211-driver-r85./src/zdauthrsp.c zd1211-driver-r85/src/zdauthrsp.c
+--- zd1211-driver-r85./src/zdauthrsp.c	2006-02-13 13:50:12.000000000 +0100
++++ zd1211-driver-r85/src/zdauthrsp.c	2009-04-01 20:07:33.083943252 +0200
+@@ -27,7 +27,11 @@ BOOLEAN CheckAlg(U8 alg)
+ 
+ BOOLEAN AuthOdd_Idle(Signal_t *signal)
+ {
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         FrmDesc_t *pfrmDesc;
+         Frame_t *rdu;
+         U16 arAlg;
+diff -upr zd1211-driver-r85./src/zdhci.c zd1211-driver-r85/src/zdhci.c
+--- zd1211-driver-r85./src/zdhci.c	2006-02-13 13:50:12.000000000 +0100
++++ zd1211-driver-r85/src/zdhci.c	2009-04-01 20:07:33.087276250 +0200
+@@ -416,7 +416,11 @@ BOOLEAN zd_CheckMic(U8 *pHdr, U8 *pBody,
+                                 zd1205_dump_data("ReceMic = ", pByte, 8);
+ 
+                                 printk(KERN_ERR "SW MIC Check fail\n");
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++                                hostap_michael_mic_failure((struct zd1205_private *)g_dev->ml_priv, (struct hostap_ieee80211_hdr *)pHdr, pIV[3] & KEYID_MASK);
++#else  
+                                 hostap_michael_mic_failure((struct zd1205_private *)g_dev->priv, (struct hostap_ieee80211_hdr *)pHdr, pIV[3] & KEYID_MASK);
++#endif
+                                 //pdot11Obj->MicFailure(&pEthHdr[6]);
+                                 return FALSE;
+                         } else {
+@@ -1010,7 +1014,11 @@ BOOLEAN zd_ChooseAP(BOOLEAN bUseBssid)
+ BOOLEAN zd_InfraConnect(U8 index)
+ {
+         Signal_t *signal;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++        struct zd1205_private *macp = (struct zd1205_private *)g_dev->ml_priv;
++#else  
+         struct zd1205_private *macp = (struct zd1205_private *)g_dev->priv;
++#endif
+ 
+         MacAddr_t *pBssid;
+         Element *pSsid = NULL;
+@@ -1111,7 +1119,11 @@ BOOLEAN zd_InfraConnect(U8 index)
+ 
+ BOOLEAN zd_IbssConnect(void)
+ {
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         int i;
+         U8 Length;
+         BOOLEAN bBSSFound = FALSE;
+diff -upr zd1211-driver-r85./src/zdpmfilter.c zd1211-driver-r85/src/zdpmfilter.c
+--- zd1211-driver-r85./src/zdpmfilter.c	2006-03-18 12:02:26.000000000 +0100
++++ zd1211-driver-r85/src/zdpmfilter.c	2009-04-01 20:07:33.087276250 +0200
+@@ -734,7 +734,11 @@ void ConfigBcnFIFO(void)
+ {
+         int i, j;
+         BOOLEAN	bcst = FALSE;
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         Signal_t *signal;
+         U8 tim[256];
+         U8 Beacon[256];
+diff -upr zd1211-driver-r85./src/zdshared.c zd1211-driver-r85/src/zdshared.c
+--- zd1211-driver-r85./src/zdshared.c	2006-02-13 13:50:12.000000000 +0100
++++ zd1211-driver-r85/src/zdshared.c	2009-04-01 20:07:33.087276250 +0200
+@@ -8,7 +8,11 @@ extern struct net_device *g_dev;
+ 
+ void mkFragment(Signal_t *signal, FrmDesc_t *pfrmDesc, U8 *pEthHdr)
+ {
+-        struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+         Frame_t *mpdu, *curMpdu;
+         FrmInfo_t *pfrmInfo;
+         BOOLEAN bWep;
+@@ -444,7 +448,11 @@ void mkFragment(Signal_t *signal, FrmDes
+                                            U16 Cap, Element *pSsid, Element *pSupRates, Element *pDsParms,
+                                            Element *pExtRates, Element *pWpa, U8 vapId)
+                         {
+-                                struct zd1205_private *macp=g_dev->priv;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++	struct zd1205_private *macp = g_dev->ml_priv;
++#else  
++	struct zd1205_private *macp = g_dev->priv;
++#endif
+ 
+                                 U8 *body;
+                                 U8 elemLen;
+diff -upr zd1211-driver-r85./src/zdusb.c zd1211-driver-r85/src/zdusb.c
+--- zd1211-driver-r85./src/zdusb.c	2009-04-01 19:19:52.474234884 +0200
++++ zd1211-driver-r85/src/zdusb.c	2009-04-01 20:07:33.087276250 +0200
+@@ -249,7 +249,11 @@ static int zd1211_probe(struct usb_inter
+ 
+         g_dev = net;  //save this for CBs use
+         //macp = net->priv; //kernel 2.4
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
++        net->ml_priv = macp;   //kernel 2.6.29+
++#else  
+         net->priv = macp;   //kernel 2.6
++#endif
+ 
+         /* ath_desc: use /dev/wlanX as device node */
+         strcpy(net->name, "wlan%d");

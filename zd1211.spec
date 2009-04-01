@@ -20,7 +20,7 @@
 %endif
 
 %define		zd1211_name	zd1211-driver-r85
-%define		rel		5
+%define		rel		6
 %define		pname	zd1211
 Summary:	Linux driver for USB WLAN cards based on zd1211
 Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych USB opartych na układzie zd1211
@@ -35,6 +35,7 @@ Patch0:		%{pname}-build.patch
 Patch1:		%{pname}-3410.patch
 Patch2:		%{pname}-2.6.22.patch
 Patch3:		%{pname}-2.6.27.patch
+Patch4:		%{pname}-2.6.29.patch
 URL:		http://zd1211.ath.cx/
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.27}
 BuildRequires:	rpmbuild(macros) >= 1.330
@@ -79,6 +80,7 @@ Ten pakiet zawiera sterowniki jądra Linuksa dla kart WLAN na zd1211.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %build_kernel_modules -m zd1211

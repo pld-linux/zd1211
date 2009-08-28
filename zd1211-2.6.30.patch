@@ -1,0 +1,17 @@
+--- zd1211-driver-r85/src/zdcompat.h.orig	2009-08-28 14:24:56.000000000 +0200
++++ zd1211-driver-r85/src/zdcompat.h	2009-08-28 14:31:31.000000000 +0200
+@@ -65,12 +65,14 @@
+ #endif
+ 
+ /* linux < 2.5.69 */
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,30))
+ #ifndef IRQ_NONE
+ typedef void irqreturn_t;
+ #define IRQ_NONE
+ #define IRQ_HANDLED
+ #define IRQ_RETVAL(x)
+ #endif
++#endif
+ 
+ #ifndef in_atomic
+ #define in_atomic()  0
